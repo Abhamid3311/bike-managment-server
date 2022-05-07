@@ -19,19 +19,32 @@ async function run() {
         const bikeCollections = client.db("Bikes-managment").collection("bikes");
 
         //Get All Bikes
-        app.get('/bikes', async (req, res) => {
+        app.get('/inventory', async (req, res) => {
             const query = {};
             const cursor = bikeCollections.find(query);
             const bikes = await cursor.toArray();
             res.send(bikes);
         });
         //Get Singel Bike
-        app.get('/bikes/:id', async (req, res) => {
+        app.get('/inventory/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const bike = await bikeCollections.findOne(query);
             res.send(bike);
         });
+        //Post
+        app.post('/inventory', async (req, res) => {
+            const newBike = req.body
+            const addBike = await bikeCollections.insertOne(newBike);
+            res.send(addBike);
+        });
+        //DELETE
+        app.delete('/inventory/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const deleteItem = await serviceCollection.deleteOne(query);
+            res.send(deleteItem);
+        })
 
     }
     finally {
