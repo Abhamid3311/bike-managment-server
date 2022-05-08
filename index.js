@@ -45,6 +45,21 @@ async function run() {
             const deleteItem = await bikeCollections.deleteOne(query);
             res.send(deleteItem);
         });
+        //Update quantity
+        app.put('/inventory/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateQuantity = req.body;
+            console.log(req.body);
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    quantity: updateQuantity.quantity,
+                }
+            };
+            const result = await bikeCollections.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        })
 
     }
     finally {
